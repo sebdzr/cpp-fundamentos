@@ -1,0 +1,13 @@
+# Archivos generados durante la compliacion
+bin/
+*.exe
+*.out
+*.o
+*.obj
+
+# Configuraciones locales de VS Code
+.vscode/
+
+# Archivos temporales
+*.temp
+*.log
