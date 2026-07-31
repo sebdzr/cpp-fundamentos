@@ -42,6 +42,17 @@ Programa que solicita varios números enteros y calcula:
 - Funciones.
 - Ciclos basados en rango.
 - Complejidad temporal lineal `O(n)`.
+- Estructuras mediante `struct`.
+- Refactorización
+- Cálculo de estadisticas en un solo recorrido.
+
+#### Optimización
+
+La primera versión calculaba cada estadística mediante un recorrido independiente del vector.
+
+La versión actual utiliza una estructura llamada `Estadisticas` y calcula todos los resultados mediante un único recorrido.
+
+Ambas versiones tienen complejidad temporal `O(n)`, pero la versión optimizada realiza menos recorridos y menos trabajo real.
 
 ### Compilación
 
