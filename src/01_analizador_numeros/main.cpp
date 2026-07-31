@@ -8,67 +8,45 @@ void print(const Args&... args){
     cout << '\n';
 }
 
-int calcularSuma(const vector<int>& numeros){
+struct Estadisticas {
     int suma{};
-
-    for (const int numero : numeros){
-        suma += numero;
-    }
-
-    return suma;
-}
-
-double calcularPromedio(const vector<int>& numeros){
-    const int suma{calcularSuma(numeros)};
-    
-    return static_cast<double>(suma) / numeros.size();
-}
-
-int encontrarMenor(const vector<int>& numeros){
-    int menor{numeros.front()};
-
-    for(const int numero : numeros){
-        if (numero < menor){
-            menor = numero;
-        }
-    }
-
-    return menor;
-}
-
-int encontrarMayor(const vector<int>& numeros){
-    int mayor{numeros.front()};
-
-    for (const int numero : numeros){
-        if (numero > mayor){
-            mayor = numero;
-        }
-    }
-
-    return mayor;
-}
-
-int contarPares(const vector<int>& numeros){
+    double promedio{};
+    int menor{};
+    int mayor{};
     int cantidadPares{};
+    int cantidadImpares{};
+};
+
+
+Estadisticas analizarNumeros(const vector<int>& numeros){
+    Estadisticas resultados;
+
+    resultados.menor = numeros.front();
+    resultados.mayor = numeros.front();
 
     for (const int numero : numeros){
+        resultados.suma += numero;
+
+        if (numero < resultados.menor){
+            resultados.menor = numero;
+        }
+
+        if (numero > resultados.mayor){
+            resultados.mayor = numero;
+        }
+
         if (numero % 2 == 0){
-            cantidadPares++;
+            resultados.cantidadPares++;
+        }
+
+        else {
+            resultados.cantidadImpares++;
         }
     }
 
-    return cantidadPares;
-}
+    resultados.promedio = static_cast<double>(resultados.suma) / numeros.size();
 
-int contarImpares(const vector<int>& numeros){
-    int cantidadImpares{};
-
-    for(const int numero : numeros){
-        if (numero % 2 != 0){
-            cantidadImpares++;
-        }
-    }
-    return cantidadImpares;
+    return resultados;
 }
 
 int main()
@@ -96,20 +74,15 @@ int main()
         numeros.push_back(numero);
     }
 
-    const int suma{calcularSuma(numeros)};
-    const double promedio{calcularPromedio(numeros)};
-    const int menor{encontrarMenor(numeros)};
-    const int mayor{encontrarMayor(numeros)};
-    const int pares{contarPares(numeros)};
-    const int impares{contarImpares(numeros)};
+    const Estadisticas resultados{analizarNumeros(numeros)};
 
     print("\nRESULTADOS");
-    print("Suma: ", suma);
-    print("Promedio: ", promedio);
-    print("Numero menor: ", menor);
-    print("Numero mayor: ", mayor);
-    print("Cantidad de pares: ", pares);
-    print("Cantidad de impares: ", impares);
+    print("Suma: ", resultados.suma);
+    print("Promedio: ", resultados.promedio);
+    print("Numero menor: ", resultados.menor);
+    print("Numero mayor: ", resultados.mayor);
+    print("Cantidad de pares: ", resultados.cantidadPares);
+    print("Cantidad de impares: ", resultados.cantidadImpares);
 
     return 0;
 }
