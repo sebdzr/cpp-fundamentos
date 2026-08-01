@@ -65,3 +65,29 @@ g++ .\src\01_analizador_numeros\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .
 ```powershell
 .\bin\analizador.exe
 ```
+### 02. Búsqueda lineal
+
+Programa que almacena números enteros y busca un valor recorriendo el vector desde el primer elemento hasta encontrarlo.
+
+#### Conceptos practicados
+
+- Índices de un vector.
+- `size()`.
+- Acceso seguro mediante `at()`.
+- Diferencia entre `at(i)` y `[i]`.
+- Uso de `-1` para representar un resultado no encontrado.
+- Búsqueda lineal.
+- Complejidad temporal `O(n)`.
+- Complejidad espacial adicional `O(1)`.
+
+#### Compilación
+
+```powershell
+g++ .\src\02_busqueda_lineal\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\busqueda.exe
+```
+
+#### Ejecución
+
+```powershell
+.\bin\busqueda.exe
+```
