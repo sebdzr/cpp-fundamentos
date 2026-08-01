@@ -10,7 +10,7 @@ void print(const Args&... args){
 
 int buscarPosicion(const vector<int>& numeros, const int buscado){
     for (size_t i = 0; i < numeros.size(); i++){
-        if (numeros[i] == buscado){
+        if (numeros.at(i) == buscado){
             return static_cast<int>(i);
         }
     }
