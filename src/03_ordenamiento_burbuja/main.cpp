@@ -20,15 +20,28 @@ void ordenarBurbuja(vector<int>& numeros){
     const size_t cantidad{numeros.size()};
 
     for (size_t pasada = 0; pasada < cantidad -1; pasada++){
-        for (size_t i = 0; i < cantidad - 1 - pasada; i++){
+       bool huboIntercambio{false};
+
+       for (size_t i = 0; i < cantidad - 1 - pasada; i++){
             if(numeros.at(i) > numeros.at(i + 1)){
                 swap(numeros.at(i), numeros.at(i + 1));
+                huboIntercambio = true;
             }
-        }
+       }
+
+       cout << "Despues de la pasada " << pasada + 1 << ": ";
+       mostrarVector(numeros);
+
+       if(!huboIntercambio){
+            print("No hubo intercambios: el vector ya esta ordenado.");
+            break;
+       }
+    
     }
+    
 }
 
-int main(){
+int main() {
     int cantidad{};
 
     print("ORDENAMIENTO BURBUJA");
