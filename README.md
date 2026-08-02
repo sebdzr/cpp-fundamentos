@@ -91,3 +91,38 @@ g++ .\src\02_busqueda_lineal\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bi
 ```powershell
 .\bin\busqueda.exe
 ```
+
+### 03. Ordenamiento burbuja
+
+Programa que ordena números enteros de menor a mayor mediante comparaciones e intercambios entre elementos vecinos.
+
+#### Conceptos practicados
+
+- Ordenamiento burbuja.
+- Ciclos anidados.
+- Acceso seguro mediante `at()`.
+- Modificación de vectores mediante referencia.
+- Intercambio de valores con `swap()`
+- Uso de una bandera booleana.
+- Salida anticipada mediante `break`.
+- Complejidad temporal cuadrática.
+
+#### Complejidad
+
+- Mejor caso optimizado: `O(n)`.
+- Peor caso: `O(n²)`.
+- Espacio adicional: `O(1)`.
+
+La optimización utiliza una variable booleana para detener el algoritmo cuando una pasada completa no realiza intercambios.
+
+#### Compilación
+
+```powershell
+g++ .\src\03_ordenamiento_burbuja\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\burbuja.exe
+```
+
+#### Ejecución
+
+```powershell
+.\bin\burbuja.exe
+```
