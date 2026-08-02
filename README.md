@@ -126,3 +126,30 @@ g++ .\src\03_ordenamiento_burbuja\main.cpp -std=c++17 -Wall -Wextra -pedantic -o
 ```powershell
 .\bin\burbuja.exe
 ```
+
+### 04. Búsqueda binaria
+
+Programa que ordena un conjunto de números y busca un valor descartando la mitad de la zona pendiente en cada iteración.
+
+#### Conceptos practicados
+
+- Búsqueda binaria.
+- Límites izquierdo, derecho y central.
+- Ordenamiento mediante `sort()`.
+- Uso de `begin()` y `end()`.
+- Acceso seguro mediante `at()`.
+- Conversión explícita mediante `static_cast`.
+- Complejidad temporal `O(log n)`.
+- Complejidad espacial adicional `O(1)`.
+
+#### Compilación
+
+```powershell
+g++ .\src\04_busqueda_binaria\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\binaria.exe
+```
+
+#### Ejecución
+
+```powershell
+.\bin\binaria.exe
+```
