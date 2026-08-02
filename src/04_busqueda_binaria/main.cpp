@@ -70,6 +70,8 @@ int main()
     vector<int> numeros;
     numeros.reserve(static_cast<size_t>(cantidad));
 
+
+
     for(int i = 0; i < cantidad; i++)
     {
         int numero{};
