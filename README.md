@@ -153,3 +153,28 @@ g++ .\src\04_busqueda_binaria\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\b
 ```powershell
 .\bin\binaria.exe
 ```
+
+### 05. Punteros y funciones
+
+Práctica introductoria sobre punteros en C++ y separación del código en varios archivos.
+
+#### Conceptos aplicados:
+
+- Obtención de direcciones de memoria con `&`.
+- Desreferenciación de punteros con `*`.
+- Validación de punteros mediante `nullptr`.
+- Modificación de una variable desde una función.
+- Separación entre archivo de cabecera, implementación y `main`
+- Compliación y enlazado de múltiples archivos `.cpp`
+
+#### Compilación
+
+```powershell
+g++ .\src\05_punteros_funciones\main.cpp .\src\05_punteros_funciones\Operaciones.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\05_punteros_funciones.exe 
+```
+
+#### Ejecución
+
+```powershell
+.\bin\05_punteros.exe
+```
