@@ -178,3 +178,27 @@ g++ .\src\05_punteros_funciones\main.cpp .\src\05_punteros_funciones\Operaciones
 ```powershell
 .\bin\05_punteros.exe
 ```
+
+### 06. Memoria en `std::vector`
+
+Práctica para observar cómo `std::vector` administra su tamaño y capacidad durante la inserción de elementos.
+
+Conceptos aplicados:
+
+- Diferencia entre `size()` y `capacity()`.
+- Reserva anticipada de memoria con `reserve()`.
+- Inserción de elementos al final con `push_back()`.
+- Recorrido seguro mediante `size_t` y `at()`.
+- Observación de la reasignación de memoria al superar la capacidad.
+
+#### Compilación
+
+```powershell
+g++ .\src\06_vector_memoria -std=c++17 -Wall -Wextra -pedantic -o .\bin\06_vector_memoria.exe
+```
+
+#### Ejecución
+
+```powershell
+.\bin\06_vector_memoria.exe
+```
