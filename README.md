@@ -1,6 +1,6 @@
 # C++ Fundamentos
 
-Repositorio destinado a practicar programación, algoritmia y estructuras de datos utilizando C++
+Repositorio destinado a practicar programación, algoritmia y estructuras de datos utilizando C++. 
 
 ## Objetivos
 
@@ -15,6 +15,20 @@ Repositorio destinado a practicar programación, algoritmia y estructuras de dat
 ```text
 cpp-fundamentos/
 ├── src/
+│   ├── 01_analizador_numeros/
+│   │   └── main.cpp
+│   ├── 02_busqueda_lineal/
+│   │   └── main.cpp
+│   ├── 03_ordenamiento_burbuja/
+│   │   └── main.cpp
+│   ├── 04_busqueda_binaria/
+│   │   └── main.cpp
+│   ├── 05_punteros_funciones/
+│   │   ├── main.cpp
+│   │   ├── Operaciones.cpp
+│   │   └── Operaciones.h
+│   ├── 06_vector_memoria/
+│   │   └── main.cpp
 │   └── main.cpp
 ├── .gitignore
 └── README.md
@@ -33,18 +47,18 @@ Programa que solicita varios números enteros y calcula:
 - Cantidad de números pares.
 - Cantidad de números impares.
 
-### Conceptos practicados
+#### Conceptos practicados
 
 - `std::vector`.
-- `push_back`.
-- `reserve`.
+- `push_back()`.
+- `reserve()`.
 - Paso de vectores mediante referencia constante.
 - Funciones.
 - Ciclos basados en rango.
 - Complejidad temporal lineal `O(n)`.
 - Estructuras mediante `struct`.
-- Refactorización
-- Cálculo de estadisticas en un solo recorrido.
+- Refactorización.
+- Cálculo de estadísticas en un solo recorrido.
 
 #### Optimización
 
@@ -54,17 +68,18 @@ La versión actual utiliza una estructura llamada `Estadisticas` y calcula todos
 
 Ambas versiones tienen complejidad temporal `O(n)`, pero la versión optimizada realiza menos recorridos y menos trabajo real.
 
-### Compilación
+#### Compilación
 
 ```powershell
 g++ .\src\01_analizador_numeros\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\analizador.exe
 ```
 
-### Ejecución
+#### Ejecución
 
 ```powershell
 .\bin\analizador.exe
 ```
+
 ### 02. Búsqueda lineal
 
 Programa que almacena números enteros y busca un valor recorriendo el vector desde el primer elemento hasta encontrarlo.
@@ -102,7 +117,7 @@ Programa que ordena números enteros de menor a mayor mediante comparaciones e i
 - Ciclos anidados.
 - Acceso seguro mediante `at()`.
 - Modificación de vectores mediante referencia.
-- Intercambio de valores con `swap()`
+- Intercambio de valores con `swap()`.
 - Uso de una bandera booleana.
 - Salida anticipada mediante `break`.
 - Complejidad temporal cuadrática.
@@ -158,32 +173,32 @@ g++ .\src\04_busqueda_binaria\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\b
 
 Práctica introductoria sobre punteros en C++ y separación del código en varios archivos.
 
-#### Conceptos aplicados:
+#### Conceptos aplicados
 
 - Obtención de direcciones de memoria con `&`.
 - Desreferenciación de punteros con `*`.
 - Validación de punteros mediante `nullptr`.
 - Modificación de una variable desde una función.
-- Separación entre archivo de cabecera, implementación y `main`
-- Compliación y enlazado de múltiples archivos `.cpp`
+- Separación entre archivo de cabecera, implementación y `main`.
+- Compilación y enlazado de múltiples archivos `.cpp`.
 
 #### Compilación
 
 ```powershell
-g++ .\src\05_punteros_funciones\main.cpp .\src\05_punteros_funciones\Operaciones.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\05_punteros_funciones.exe 
+g++ .\src\05_punteros_funciones\main.cpp .\src\05_punteros_funciones\Operaciones.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\05_punteros_funciones.exe
 ```
 
 #### Ejecución
 
 ```powershell
-.\bin\05_punteros.exe
+.\bin\05_punteros_funciones.exe
 ```
 
 ### 06. Memoria en `std::vector`
 
 Práctica para observar cómo `std::vector` administra su tamaño y capacidad durante la inserción de elementos.
 
-Conceptos aplicados:
+#### Conceptos aplicados:
 
 - Diferencia entre `size()` y `capacity()`.
 - Reserva anticipada de memoria con `reserve()`.
@@ -194,7 +209,7 @@ Conceptos aplicados:
 #### Compilación
 
 ```powershell
-g++ .\src\06_vector_memoria -std=c++17 -Wall -Wextra -pedantic -o .\bin\06_vector_memoria.exe
+g++ .\src\06_vector_memoria\main.cpp -std=c++17 -Wall -Wextra -pedantic -o .\bin\06_vector_memoria.exe
 ```
 
 #### Ejecución
