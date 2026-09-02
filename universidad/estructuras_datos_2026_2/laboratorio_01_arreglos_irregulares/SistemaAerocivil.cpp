@@ -360,7 +360,7 @@ void SistemaAerocivil::precargarDatos()
                 "AV4809",
                 "Villavicencio (VVC)",
                 "Bogota (BOG)",
-                "7:55",
+                "07:55",
                 atr72
             )
         );
