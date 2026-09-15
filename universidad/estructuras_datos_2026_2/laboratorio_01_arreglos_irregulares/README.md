@@ -1,9 +1,8 @@
 # Laboratorio 01 - Sistema Aerocivil con arreglos irregulares
 
-Laboratorio de Estructuras de Datos desarrollado en C++ para administrar
-aerolíneas y vuelos del Aeropuerto Vanguardia de Villavicencio.
+En este laboratorio de Estructuras de Datos con Néstor Suat trabajé memoria dinámica y arreglos irregulares a través de un sistema de aerolíneas y vuelos. El escenario es el Aeropuerto Vanguardia de Villavicencio.
 
-El ejercicio se centra en el uso de memoria dinámica y arreglos irregulares.
+El punto que quiero conservar de esta práctica es cómo administrar filas de distinto tamaño, redimensionarlas y liberar su memoria sin perder los datos.
 
 ## Objetivo
 
@@ -63,19 +62,11 @@ El sistema permite:
 
 ## Datos precargados
 
-El programa incluye información precargada basada en datos consultados sobre
-la operación aérea del Aeropuerto Vanguardia (VVC).
+El código contiene ejemplos de aerolíneas, aeronaves y vuelos para probar el sistema. Son datos de trabajo del ejercicio; este repositorio no mantiene una programación aérea actualizada.
 
-Se utilizaron como referencias aerolíneas como:
+## Qué practiqué
 
-- Avianca / Avianca Express
-- Clic Air
-- SATENA
-
-También se utilizaron aeronaves regionales ATR y sus capacidades de pasajeros.
-
-Los horarios y frecuencias aéreas pueden cambiar, por lo que la precarga se
-considera una referencia de la programación consultada para 2026.
+Separé las responsabilidades entre clases y trabajé copia profunda, destructores y redimensionamiento manual. Cada fila representa un día: agregar un vuelo implica reservar espacio, copiar los elementos y liberar la fila anterior.
 
 ## Validaciones
 
@@ -104,7 +95,11 @@ docs/UML_AEROCIVIL.dia
 
 ## Compilación
 
-Desde la raíz de `cpp-fundamentos`:
+Desde la raíz de `cpp-fundamentos`, crea primero la carpeta de salida:
+
+```powershell
+New-Item -ItemType Directory -Force bin | Out-Null
+```
 
 ```powershell
 g++ .\universidad\estructuras_datos_2026_2\laboratorio_01_arreglos_irregulares\main.cpp `
@@ -139,3 +134,4 @@ laboratorio_01_arreglos_irregulares/
 └── docs/
     └── UML_AEROCIVIL.dia
 ```
+[Volver al curso](../README.md)

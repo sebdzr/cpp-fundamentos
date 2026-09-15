@@ -1,7 +1,8 @@
 #include "SistemaAerocivil.h"
 
+#include <cctype>
 #include <iostream>
-#include <limits>
+#include <sstream>
 #include <string>
 
 using namespace std;
@@ -10,74 +11,127 @@ using namespace std;
 // ENTRADAS SEGURAS
 // ============================================================
 
+class FinDeEntrada
+{
+};
+
+string leerLinea(const string& mensaje)
+{
+    cout << mensaje;
+
+    string entrada;
+
+    if (!getline(cin, entrada))
+    {
+        throw FinDeEntrada();
+    }
+
+    return entrada;
+}
+
+string recortar(const string& texto)
+{
+    size_t inicio = 0;
+
+    while (
+        inicio < texto.length() &&
+        isspace(static_cast<unsigned char>(texto[inicio]))
+    )
+    {
+        inicio++;
+    }
+
+    size_t fin = texto.length();
+
+    while (
+        fin > inicio &&
+        isspace(static_cast<unsigned char>(texto[fin - 1]))
+    )
+    {
+        fin--;
+    }
+
+    return texto.substr(inicio, fin - inicio);
+}
+
 int leerEntero(const string& mensaje)
 {
-    int valor;
-
-    while(true)
+    while (true)
     {
-        cout << mensaje;
+        string entrada = recortar(leerLinea(mensaje));
 
-        if (cin >> valor)
+        stringstream ss(entrada);
+        int valor;
+
+        if (ss >> valor)
         {
-            cin.ignore(
-                numeric_limits<streamsize>::max(),
-                '\n'
-            );
+            ss >> ws;
 
-            return valor;
+            if (ss.eof())
+            {
+                return valor;
+            }
         }
 
-        cout << "Entrada invalida. Intente nuevamente.\n";
-
-        cin.clear();
-
-        cin.ignore(
-            numeric_limits<streamsize>::max(),
-            '\n'
-        );
+        cout << "Entrada invalida. Escriba un numero entero, "
+             << "sin letras ni decimales.\n";
     }
 }
 
 string leerTexto(const string& mensaje)
 {
-    string texto;
-
-    do
+    while (true)
     {
-       cout << mensaje;
-       getline(cin, texto);
+        string texto = recortar(leerLinea(mensaje));
 
-       if(texto.empty())
-       {
-          cout << "El texto no puede estar vacio.\n";
-       }
+        if (!texto.empty())
+        {
+            return texto;
+        }
 
-    } while (texto.empty());
+        cout << "Entrada vacia. Escriba al menos un caracter.\n";
+    }
+}
 
-    return texto;
-    
+int leerOpcionEnRango(
+    const string& mensaje,
+    int minimo,
+    int maximo
+)
+{
+    while (true)
+    {
+        int opcion = leerEntero(mensaje);
+
+        if (opcion >= minimo && opcion <= maximo)
+        {
+            return opcion;
+        }
+
+        cout << "Opcion fuera de rango. Escriba un numero entre "
+             << minimo
+             << " y "
+             << maximo
+             << ".\n";
+    }
 }
 
 int leerDia()
 {
-    int dia;
+    cout << "\nDias disponibles:\n";
+    cout << "1. Lunes\n";
+    cout << "2. Martes\n";
+    cout << "3. Miercoles\n";
+    cout << "4. Jueves\n";
+    cout << "5. Viernes\n";
+    cout << "6. Sabado\n";
+    cout << "7. Domingo\n";
 
-    do
-    {
-        dia = leerEntero(
-            "Dia (1=Lunes, 2=Martes, 3=Miercoles, "
-            "4=Jueves, 5=Viernes, 6=Sabado, 7=Domingo: "
-        );
-
-        if (dia < 1 || dia > 7)
-        {
-            cout << "Dia invalido.\n";
-        }
-
-    } while (dia < 1 || dia > 7);
-    
-    return dia - 1; 
+    return leerOpcionEnRango(
+        "Escriba el numero del dia (1-7): ",
+        1,
+        7
+    ) - 1;
 }
 
 string nombreDia(int dia)
@@ -99,6 +153,123 @@ string nombreDia(int dia)
     }
 
     return dias[dia];
+}
+
+Aeronave seleccionarAeronave()
+{
+    cout << "\n=== AERONAVES DISPONIBLES ===\n";
+    cout << "1. ATR 42 - 48 pasajeros\n";
+    cout << "2. ATR 72-600 - 70 pasajeros\n";
+
+    int opcion = leerOpcionEnRango(
+        "Escriba 1 o 2 para seleccionar la aeronave: ",
+        1,
+        2
+    );
+
+    if (opcion == 1)
+    {
+        return Aeronave("ATR 42", 48);
+    }
+
+    return Aeronave("ATR 72-600", 70);
+}
+
+string leerHoraValida()
+{
+    while (true)
+    {
+        string hora =
+            leerTexto("Hora (HH:MM): ");
+
+        Vuelo prueba;
+
+        if (prueba.setHora(hora))
+        {
+            return hora;
+        }
+
+        cout << "Hora invalida. "
+             << "Use formato HH:MM entre 00:00 y 23:59.\n";
+    }
+}
+
+string normalizarCodigo(string codigo)
+{
+    codigo = recortar(codigo);
+
+    for (char& c : codigo)
+    {
+        c = toupper(static_cast<unsigned char>(c));
+    }
+
+    return codigo;
+}
+
+bool codigoValido(const string& codigo)
+{
+    if (codigo.empty())
+    {
+        return false;
+    }
+
+    for (char c : codigo)
+    {
+        if (!isalnum(static_cast<unsigned char>(c)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+string leerCodigo(const string& mensaje)
+{
+    while (true)
+    {
+        string codigo =
+            normalizarCodigo(leerTexto(mensaje));
+
+        if (codigoValido(codigo))
+        {
+            return codigo;
+        }
+
+        cout << "Codigo invalido. Escriba solo letras y numeros, "
+             << "sin espacios ni simbolos. Ejemplo: AV4809.\n";
+    }
+}
+
+string normalizarParaComparar(string texto)
+{
+    texto = recortar(texto);
+
+    for (char& c : texto)
+    {
+        c = toupper(static_cast<unsigned char>(c));
+    }
+
+    return texto;
+}
+
+bool mismaUbicacion(const string& primera, const string& segunda)
+{
+    return normalizarParaComparar(primera) ==
+           normalizarParaComparar(segunda);
+}
+
+bool confirmarOperacion(const string& advertencia)
+{
+    cout << "\nADVERTENCIA: " << advertencia << '\n';
+    cout << "1. Confirmar\n";
+    cout << "0. Cancelar\n";
+
+    return leerOpcionEnRango(
+        "Escriba 1 para confirmar o 0 para cancelar: ",
+        0,
+        1
+    ) == 1;
 }
 
 
@@ -203,6 +374,81 @@ void mostrarSistema(const SistemaAerocivil& sistema)
     }
 }
 
+bool mostrarAerolineasDisponibles(
+    const SistemaAerocivil& sistema
+)
+{
+    cout << "\n=== AEROLINEAS DISPONIBLES ===\n";
+
+    if (sistema.getCantidadAerolineas() == 0)
+    {
+        cout << "No hay aerolineas registradas.\n";
+        return false;
+    }
+
+    for (
+        int i = 0;
+        i < sistema.getCantidadAerolineas();
+        i++
+    )
+    {
+        const Aerolinea* aerolinea =
+            sistema.getAerolinea(i);
+
+        if (aerolinea != nullptr)
+        {
+            cout << "- "
+                 << aerolinea->getCodigo()
+                 << " | "
+                 << aerolinea->getNombre()
+                 << '\n';
+        }
+    }
+
+    return true;
+}
+
+Aerolinea* seleccionarAerolinea(
+    SistemaAerocivil& sistema,
+    const string& accion
+)
+{
+    if (!mostrarAerolineasDisponibles(sistema))
+    {
+        return nullptr;
+    }
+
+    string codigo = leerCodigo(
+        "Escriba el codigo de la aerolinea que desea " +
+        accion +
+        ": "
+    );
+
+    Aerolinea* aerolinea =
+        sistema.buscarAerolinea(codigo);
+
+    if (aerolinea == nullptr)
+    {
+        cout << "No existe una aerolinea con el codigo "
+             << codigo
+             << ". Revise la lista mostrada.\n";
+    }
+
+    return aerolinea;
+}
+
+int contarVuelos(const Aerolinea& aerolinea)
+{
+    int total = 0;
+
+    for (int dia = 0; dia < 7; dia++)
+    {
+        total += aerolinea.getCantidadVuelos(dia);
+    }
+
+    return total;
+}
+
 // ============================================================
 // CRUD AEROLINEAS
 // ============================================================
@@ -211,12 +457,16 @@ void registrarAerolinea(SistemaAerocivil& sistema)
 {
     cout << "\n=== REGISTRAR AEROLINEA ===\n";
 
+    mostrarAerolineasDisponibles(sistema);
+
     string nombre =
-        leerTexto("Nombre: ");
+        leerTexto("Escriba el nombre de la nueva aerolinea: ");
 
     string codigo =
-        leerTexto("Codigo: ");
-    
+        leerCodigo(
+            "Escriba su codigo alfanumerico. Ejemplo: AV: "
+        );
+
     Aerolinea nueva(nombre, codigo);
 
     if (sistema.agregarAerolinea(nueva))
@@ -234,15 +484,11 @@ void actualizarAerolinea(SistemaAerocivil& sistema)
 {
     cout << "\n=== ACTUALIZAR AEROLINEA ===\n";
 
-    string codigoActual =
-        leerTexto("Codigo actual: ");
-    
     Aerolinea* aerolinea =
-        sistema.buscarAerolinea(codigoActual);
-    
+        seleccionarAerolinea(sistema, "actualizar");
+
     if (aerolinea == nullptr)
     {
-        cout << "Aerolinea no encontrada.\n";
         return;
     }
 
@@ -251,15 +497,19 @@ void actualizarAerolinea(SistemaAerocivil& sistema)
     cout << "0. Cancelar\n";
 
     int opcion =
-        leerEntero("Opcion: ");
+        leerOpcionEnRango(
+            "Escriba una opcion entre 0 y 2: ",
+            0,
+            2
+        );
 
     switch (opcion)
     {
         case 1:
         {
             string nuevoNombre =
-                leerTexto("Nuevo nombre: ");
-            
+                leerTexto("Escriba el nuevo nombre: ");
+
             aerolinea->setNombre(nuevoNombre);
 
             cout << "Nombre actualizado.\n";
@@ -269,7 +519,9 @@ void actualizarAerolinea(SistemaAerocivil& sistema)
         case 2:
         {
             string nuevoCodigo =
-                leerTexto("Nuevo codigo: ");
+                leerCodigo(
+                    "Escriba el nuevo codigo alfanumerico: "
+                );
 
             Aerolinea* existente =
                 sistema.buscarAerolinea(nuevoCodigo);
@@ -281,7 +533,6 @@ void actualizarAerolinea(SistemaAerocivil& sistema)
             {
                 cout << "Ese codigo ya pertenece "
                      << "a otra aerolinea.\n";
-
                 break;
             }
 
@@ -289,17 +540,11 @@ void actualizarAerolinea(SistemaAerocivil& sistema)
 
             cout << "Codigo actualizado.\n";
             break;
-        
         }
 
         case 0:
             cout << "Operacion cancelada.\n";
             break;
-
-        default:
-            cout << "Opcion invalida.\n";
-            break;
-    
     }
 }
 
@@ -307,9 +552,34 @@ void eliminarAerolinea(SistemaAerocivil& sistema)
 {
     cout << "\n=== ELIMINAR AEROLINEA ===\n";
 
-    string codigo =
-        leerTexto("Codigo: ");
-    
+    Aerolinea* aerolinea =
+        seleccionarAerolinea(sistema, "eliminar");
+
+    if (aerolinea == nullptr)
+    {
+        return;
+    }
+
+    string codigo = aerolinea->getCodigo();
+    string nombre = aerolinea->getNombre();
+    int cantidadVuelos = contarVuelos(*aerolinea);
+
+    cout << "\nSeleccionada: "
+         << nombre
+         << " ("
+         << codigo
+         << "), con "
+         << cantidadVuelos
+         << " vuelo(s).\n";
+
+    if (!confirmarOperacion(
+        "se eliminara la aerolinea y todos sus vuelos."
+    ))
+    {
+        cout << "Operacion cancelada. No se elimino la aerolinea.\n";
+        return;
+    }
+
     if (sistema.eliminarAerolinea(codigo))
     {
         cout << "Aerolinea eliminada correctamente.\n";
@@ -317,6 +587,97 @@ void eliminarAerolinea(SistemaAerocivil& sistema)
     else
     {
         cout << "Aerolinea no encontrada.\n";
+    }
+}
+
+void mostrarVuelosDisponibles(
+    const Aerolinea& aerolinea,
+    int dia
+)
+{
+    int cantidad =
+        aerolinea.getCantidadVuelos(dia);
+
+    cout << "\n=== VUELOS DISPONIBLES ===\n";
+
+    if (cantidad == 0)
+    {
+        cout << "No hay vuelos registrados para este dia.\n";
+        return;
+    }
+
+    for (int i = 0; i < cantidad; i++)
+    {
+        const Vuelo* vuelo =
+            aerolinea.getVuelo(dia, i);
+
+        if (vuelo != nullptr)
+        {
+            cout << i + 1 << ". "
+                 << vuelo->getCodigo()
+                 << " | "
+                 << vuelo->getOrigen()
+                 << " -> "
+                 << vuelo->getDestino()
+                 << " | "
+                 << vuelo->getHora()
+                 << '\n';
+        }
+    }
+}
+
+Vuelo* seleccionarVuelo(
+    Aerolinea& aerolinea,
+    int dia,
+    const string& accion
+)
+{
+    mostrarVuelosDisponibles(aerolinea, dia);
+
+    if (aerolinea.getCantidadVuelos(dia) == 0)
+    {
+        return nullptr;
+    }
+
+    string codigoVuelo = leerCodigo(
+        "Escriba el codigo del vuelo que desea " +
+        accion +
+        ": "
+    );
+
+    Vuelo* vuelo =
+        aerolinea.buscarVuelo(dia, codigoVuelo);
+
+    if (vuelo == nullptr)
+    {
+        cout << "No existe el vuelo "
+             << codigoVuelo
+             << " para "
+             << nombreDia(dia)
+             << " en la aerolinea "
+             << aerolinea.getCodigo()
+             << ". Revise la lista mostrada.\n";
+    }
+
+    return vuelo;
+}
+
+string leerUbicacionDiferente(
+    const string& mensaje,
+    const string& otraUbicacion
+)
+{
+    while (true)
+    {
+        string ubicacion = leerTexto(mensaje);
+
+        if (!mismaUbicacion(ubicacion, otraUbicacion))
+        {
+            return ubicacion;
+        }
+
+        cout << "Origen y destino no pueden ser iguales, "
+             << "aunque cambien mayusculas o espacios.\n";
     }
 }
 
@@ -333,7 +694,11 @@ void menuAerolineas(SistemaAerocivil& sistema)
        cout << "0. Volver\n";
 
        opcion =
-            leerEntero("Opcion: ");
+            leerOpcionEnRango(
+                "Escriba una opcion entre 0 y 3: ",
+                0,
+                3
+            );
 
         switch (opcion)
         {
@@ -351,11 +716,6 @@ void menuAerolineas(SistemaAerocivil& sistema)
 
             case 0:
                 break;
-
-            default:
-                cout << "Opcion invalida.\n";
-                break;
-
         }
 
     } while (opcion != 0);
@@ -370,53 +730,53 @@ void registrarVuelo(SistemaAerocivil& sistema)
 {
     cout << "\n=== REGISTRAR VUELO ===\n";
 
-    string codigoAerolinea =
-        leerTexto("Codigo de la aerolinea: ");
+    Aerolinea* aerolinea =
+        seleccionarAerolinea(sistema, "usar");
 
-    if (
-        sistema.buscarAerolinea(codigoAerolinea)
-        == nullptr
-    )
+    if (aerolinea == nullptr)
     {
-        cout << "Aerolinea no encontrada.\n";
         return;
     }
 
+    string codigoAerolinea = aerolinea->getCodigo();
+
     int dia = leerDia();
 
-    string codigoVuelo =
-        leerTexto("Codigo del vuelo: ");
+    string codigoVuelo;
 
-    string origen =
-        leerTexto("Origen: ");
-
-    string destino =
-        leerTexto("Destino: ");
-
-    string hora =
-        leerTexto("Hora: ");
-
-    string modelo =
-        leerTexto("Modelo de aeronave: ");
-
-    int capacidad;
-
-    do
+    while (true)
     {
-        capacidad =
-            leerEntero("Capacidad de pasajeros: ");
+        codigoVuelo = leerCodigo(
+            "Escriba el codigo del nuevo vuelo. Ejemplo: AV4809: "
+        );
 
-        if (capacidad <= 0)
+        if (aerolinea->buscarVuelo(dia, codigoVuelo) == nullptr)
         {
-            cout << "La capacidad debe ser mayor que 0.\n";
+            break;
         }
 
-    } while (capacidad <= 0);
+        cout << "El codigo "
+             << codigoVuelo
+             << " ya existe para "
+             << nombreDia(dia)
+             << ". Escriba uno diferente.\n";
+    }
 
-    Aeronave aeronave(
-        modelo,
-        capacidad
-    );
+    string origen =
+        leerTexto(
+            "Escriba el origen. Ejemplo: Villavicencio (VVC): "
+        );
+
+    string destino =
+        leerUbicacionDiferente(
+            "Escriba el destino. Ejemplo: Bogota (BOG): ",
+            origen
+        );
+
+    string hora =
+        leerHoraValida();
+
+    Aeronave aeronave = seleccionarAeronave();
 
     Vuelo vuelo(
         codigoVuelo,
@@ -425,6 +785,7 @@ void registrarVuelo(SistemaAerocivil& sistema)
         hora,
         aeronave
     );
+
 
     if (
         sistema.agregarVuelo(
@@ -438,9 +799,9 @@ void registrarVuelo(SistemaAerocivil& sistema)
     }
     else
     {
-        cout << "No se pudo registrar el vuelo.\n";
-        cout << "Puede existir otro vuelo con el mismo "
-             << "codigo en ese dia.\n";
+        cout << "No se pudo registrar el vuelo. "
+             << "La aerolinea, el dia o el codigo dejaron "
+             << "de ser validos.\n";
     }
 }
 
@@ -449,24 +810,21 @@ void buscarVueloMenu(SistemaAerocivil& sistema)
 {
     cout << "\n=== BUSCAR VUELO ===\n";
 
-    string codigoAerolinea =
-        leerTexto("Codigo de la aerolinea: ");
+    Aerolinea* aerolinea =
+        seleccionarAerolinea(sistema, "consultar");
+
+    if (aerolinea == nullptr)
+    {
+        return;
+    }
 
     int dia = leerDia();
 
-    string codigoVuelo =
-        leerTexto("Codigo del vuelo: ");
-
     Vuelo* vuelo =
-        sistema.buscarVuelo(
-            codigoAerolinea,
-            dia,
-            codigoVuelo
-        );
+        seleccionarVuelo(*aerolinea, dia, "consultar");
 
     if (vuelo == nullptr)
     {
-        cout << "Vuelo no encontrado.\n";
         return;
     }
 
@@ -479,24 +837,21 @@ void actualizarVuelo(SistemaAerocivil& sistema)
 {
     cout << "\n=== ACTUALIZAR VUELO ===\n";
 
-    string codigoAerolinea =
-        leerTexto("Codigo de la aerolinea: ");
+    Aerolinea* aerolinea =
+        seleccionarAerolinea(sistema, "usar");
+
+    if (aerolinea == nullptr)
+    {
+        return;
+    }
 
     int dia = leerDia();
 
-    string codigoVuelo =
-        leerTexto("Codigo actual del vuelo: ");
-
     Vuelo* vuelo =
-        sistema.buscarVuelo(
-            codigoAerolinea,
-            dia,
-            codigoVuelo
-        );
+        seleccionarVuelo(*aerolinea, dia, "actualizar");
 
     if (vuelo == nullptr)
     {
-        cout << "Vuelo no encontrado.\n";
         return;
     }
 
@@ -508,31 +863,37 @@ void actualizarVuelo(SistemaAerocivil& sistema)
     cout << "0. Cancelar\n";
 
     int opcion =
-        leerEntero("Opcion: ");
+        leerOpcionEnRango(
+            "Escriba una opcion entre 0 y 5: ",
+            0,
+            5
+        );
 
     switch (opcion)
     {
         case 1:
         {
-            string nuevoCodigo =
-                leerTexto("Nuevo codigo: ");
+            string nuevoCodigo;
 
-            Vuelo* existente =
-                sistema.buscarVuelo(
-                    codigoAerolinea,
-                    dia,
-                    nuevoCodigo
+            while (true)
+            {
+                nuevoCodigo = leerCodigo(
+                    "Escriba el nuevo codigo alfanumerico: "
                 );
 
-            if (
-                existente != nullptr &&
-                existente != vuelo
-            )
-            {
-                cout << "Ese codigo ya existe "
-                     << "en este dia.\n";
+                Vuelo* existente =
+                    aerolinea->buscarVuelo(dia, nuevoCodigo);
 
-                break;
+                if (existente == nullptr || existente == vuelo)
+                {
+                    break;
+                }
+
+                cout << "El codigo "
+                     << nuevoCodigo
+                     << " ya pertenece a otro vuelo de "
+                     << nombreDia(dia)
+                     << ". Escriba uno diferente.\n";
             }
 
             vuelo->setCodigo(nuevoCodigo);
@@ -544,7 +905,10 @@ void actualizarVuelo(SistemaAerocivil& sistema)
         case 2:
         {
             string origen =
-                leerTexto("Nuevo origen: ");
+                leerUbicacionDiferente(
+                    "Escriba el nuevo origen: ",
+                    vuelo->getDestino()
+                );
 
             vuelo->setOrigen(origen);
 
@@ -555,7 +919,10 @@ void actualizarVuelo(SistemaAerocivil& sistema)
         case 3:
         {
             string destino =
-                leerTexto("Nuevo destino: ");
+                leerUbicacionDiferente(
+                    "Escriba el nuevo destino: ",
+                    vuelo->getOrigen()
+                );
 
             vuelo->setDestino(destino);
 
@@ -566,55 +933,26 @@ void actualizarVuelo(SistemaAerocivil& sistema)
         case 4:
         {
             string hora =
-                leerTexto("Nueva hora (HH:MM): ");
+                leerHoraValida();
 
-            if (vuelo->setHora(hora))
-            {
-                cout << "Hora actualizada.\n";
-            }
-            else
-            {
-                cout << "Hora invalida. "
-                << "Debe usar formato HH:MM entre 00:00 y 23:59.\n";
-            }
+            vuelo->setHora(hora);
+
+            cout << "Hora actualizada.\n";
 
             break;
         }
 
         case 5:
         {
-            string modelo =
-                leerTexto("Nuevo modelo: ");
+            Aeronave nuevaAeronave =
+                seleccionarAeronave();
 
-            int capacidad;
-
-            do
-            {
-                capacidad =
-                    leerEntero(
-                        "Nueva capacidad: "
-                    );
-
-                if (capacidad <= 0)
-                {
-                    cout << "La capacidad debe ser "
-                         << "mayor que 0.\n";
-                }
-
-            } while (capacidad <= 0);
-
-            Aeronave nuevaAeronave(
-                modelo,
-                capacidad
-            );
-
-            vuelo->setAeronave(
-                nuevaAeronave
-            );
+            vuelo -> setAeronave(nuevaAeronave);
 
             cout << "Aeronave actualizada.\n";
+
             cout << "Nueva cantidad de pasajeros: "
-                 << vuelo->getCantidadPasajeros()
+                 << vuelo -> getCantidadPasajeros()
                  << '\n';
 
             break;
@@ -622,10 +960,6 @@ void actualizarVuelo(SistemaAerocivil& sistema)
 
         case 0:
             cout << "Operacion cancelada.\n";
-            break;
-
-        default:
-            cout << "Opcion invalida.\n";
             break;
     }
 }
@@ -635,13 +969,37 @@ void eliminarVueloMenu(SistemaAerocivil& sistema)
 {
     cout << "\n=== ELIMINAR VUELO ===\n";
 
-    string codigoAerolinea =
-        leerTexto("Codigo de la aerolinea: ");
+    Aerolinea* aerolinea =
+        seleccionarAerolinea(sistema, "usar");
+
+    if (aerolinea == nullptr)
+    {
+        return;
+    }
 
     int dia = leerDia();
 
-    string codigoVuelo =
-        leerTexto("Codigo del vuelo: ");
+    Vuelo* vuelo =
+        seleccionarVuelo(*aerolinea, dia, "eliminar");
+
+    if (vuelo == nullptr)
+    {
+        return;
+    }
+
+    string codigoAerolinea = aerolinea->getCodigo();
+    string codigoVuelo = vuelo->getCodigo();
+
+    cout << "\nVuelo seleccionado:\n";
+    mostrarVuelo(*vuelo);
+
+    if (!confirmarOperacion(
+        "se eliminara definitivamente el vuelo seleccionado."
+    ))
+    {
+        cout << "Operacion cancelada. No se elimino el vuelo.\n";
+        return;
+    }
 
     if (
         sistema.eliminarVuelo(
@@ -655,7 +1013,7 @@ void eliminarVueloMenu(SistemaAerocivil& sistema)
     }
     else
     {
-        cout << "No se encontro el vuelo.\n";
+        cout << "No se pudo eliminar el vuelo porque ya no existe.\n";
     }
 }
 
@@ -674,7 +1032,11 @@ void menuVuelos(SistemaAerocivil& sistema)
         cout << "0. Volver\n";
 
         opcion =
-            leerEntero("Opcion: ");
+            leerOpcionEnRango(
+                "Escriba una opcion entre 0 y 4: ",
+                0,
+                4
+            );
 
         switch (opcion)
         {
@@ -696,10 +1058,6 @@ void menuVuelos(SistemaAerocivil& sistema)
 
             case 0:
                 break;
-
-            default:
-                cout << "Opcion invalida.\n";
-                break;
         }
 
     } while (opcion != 0);
@@ -712,58 +1070,80 @@ void menuVuelos(SistemaAerocivil& sistema)
 
 int main()
 {
-    SistemaAerocivil sistema;
-
-    sistema.precargarDatos();
-
-    int opcion;
-
-    do
+    try
     {
-        cout << "\n=====================================\n";
-        cout << "       AEROCIVIL COLOMBIA\n";
-        cout << " Aeropuerto Vanguardia - Villavicencio\n";
-        cout << "=====================================\n";
+        SistemaAerocivil sistema;
 
-        cout << "1. Mostrar informacion del sistema\n";
-        cout << "2. Administrar aerolineas\n";
-        cout << "3. Administrar vuelos\n";
-        cout << "4. Restaurar datos precargados\n";
-        cout << "0. Salir\n";
+        sistema.precargarDatos();
 
-        opcion =
-            leerEntero("Opcion: ");
+        int opcion;
 
-        switch (opcion)
+        do
         {
-            case 1:
-                mostrarSistema(sistema);
-                break;
+            cout << "\n=====================================\n";
+            cout << "       AEROCIVIL COLOMBIA\n";
+            cout << " Aeropuerto Vanguardia - Villavicencio\n";
+            cout << "=====================================\n";
 
-            case 2:
-                menuAerolineas(sistema);
-                break;
+            cout << "1. Mostrar informacion del sistema\n";
+            cout << "2. Administrar aerolineas\n";
+            cout << "3. Administrar vuelos\n";
+            cout << "4. Restaurar datos precargados\n";
+            cout << "0. Salir\n";
 
-            case 3:
-                menuVuelos(sistema);
-                break;
+            opcion =
+                leerOpcionEnRango(
+                    "Escriba una opcion entre 0 y 4: ",
+                    0,
+                    4
+                );
 
-            case 4:
-                sistema.precargarDatos();
+            switch (opcion)
+            {
+                case 1:
+                    mostrarSistema(sistema);
+                    break;
 
-                cout << "Datos precargados restaurados.\n";
-                break;
+                case 2:
+                    menuAerolineas(sistema);
+                    break;
 
-            case 0:
-                cout << "Cerrando sistema...\n";
-                break;
+                case 3:
+                    menuVuelos(sistema);
+                    break;
 
-            default:
-                cout << "Opcion invalida.\n";
-                break;
-        }
+                case 4:
+                {
+                    if (confirmarOperacion(
+                        "se perderan todas las modificaciones actuales."
+                    ))
+                    {
+                        sistema.precargarDatos();
 
-    } while (opcion != 0);
+                        cout << "Datos precargados restaurados.\n";
+                    }
+                    else
+                    {
+                        cout << "Operacion cancelada. "
+                             << "Los datos no cambiaron.\n";
+                    }
+
+                    break;
+                }
+
+                case 0:
+                    cout << "Cerrando sistema...\n";
+                    break;
+            }
+
+        } while (opcion != 0);
+    }
+    catch (const FinDeEntrada&)
+    {
+        cout << "\nFin de entrada detectado. "
+             << "La operacion pendiente fue cancelada.\n";
+        cout << "Cerrando sistema...\n";
+    }
 
     return 0;
 }

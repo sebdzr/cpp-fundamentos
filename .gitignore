@@ -1,13 +1,39 @@
-# Archivos generados durante la compliacion
+# Compilación y depuración
 bin/
+build/
+cmake-build-*/
 *.exe
 *.out
 *.o
 *.obj
+*.pdb
+*.ilk
+*.dll
+*.a
+*.lib
 
-# Configuraciones locales de VS Code
+# Configuración local de los editores
 .vscode/
+.vs/
+*.user
+*.suo
 
-# Archivos temporales
+# Temporales y entornos locales
 *.temp
+*.tmp
 *.log
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# Credenciales locales: nunca forman parte de una entrega
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# Informes originales con identificadores estudiantiles (se conservan localmente)
+/universidad/estructuras_datos_2026_2/laboratorio_03/docs/informe*.pdf
