@@ -1,16 +1,24 @@
 #include "list.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 int main()
 {
-	List<int> list;
-	list.insert(0, 10);
-	list.insert(1, 20);
-	list.insert(2, 30);
+    List<string> list;
 
-	cout << list.size() << '\n';
+    list.insert(0, "nestor");
+    list.insert(1, "victor");
+    list.insert(2, "Maria");
+    list.insert(3, "juan");
+    list.insert(4, "pedro");
 
-return 0;
+    cout << "Orden normal: ";
+    list.print();
+
+    cout << "Orden inverso: ";
+    list.printReverse();
+
+    return 0;
 }
