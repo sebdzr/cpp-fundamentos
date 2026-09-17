@@ -46,4 +46,6 @@ El resultado debe ser una lista vacía, distinta de las entradas. No copiar ni a
 
 Para repasar la sustentación, conviene seguir el caso de exponentes iguales, el cambio de signo en la resta y la liberación de nodos en el destructor.
 
-[Guía del laboratorio](docs/Laboratorio%204%20Listas%20Enlazadas.pdf) · [Volver al curso](../README.md)
+La guía original del profesor se conserva localmente y no se distribuye con el código.
+
+[Volver al curso](../README.md)
