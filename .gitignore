@@ -37,3 +37,7 @@ credentials.json
 
 # Informes originales con identificadores estudiantiles (se conservan localmente)
 /universidad/estructuras_datos_2026_2/laboratorio_03/docs/informe*.pdf
+
+# Guías y enunciados del curso: conservar solo localmente
+/universidad/estructuras_datos_2026_2/**/docs/Laboratorio*.pdf
+/universidad/estructuras_datos_2026_2/**/docs/guias/

@@ -6,7 +6,7 @@ La idea es poder volver a un ejercicio, entender las decisiones que tomé y ejec
 
 ## Cómo ha evolucionado en 2026-2
 
-Empecé con estadísticas, búsquedas y ordenamiento sobre vectores. Después pasé a punteros, separación de archivos y memoria. Las entregas de Estructuras de Datos incorporan arreglos irregulares, listas enlazadas y templates; el laboratorio 04 aplica listas simples a la suma y resta de polinomios.
+Empecé con estadísticas, búsquedas y ordenamiento sobre vectores. Después pasé a punteros, separación de archivos y memoria. Las entregas de Estructuras de Datos incorporan arreglos irregulares, listas enlazadas y templates; el laboratorio 04 aplica listas simples a la suma y resta de polinomios. En el laboratorio 05 combiné una lista doble de estudiantes con listas simples de calificaciones e inserción por apellido.
 
 ## Cómo navegarlo
 
@@ -39,6 +39,8 @@ Para ejecutar la primera presentación desde la raíz:
 g++ src/main.cpp -std=c++17 -Wall -Wextra -pedantic -o presentacion.exe
 .\presentacion.exe
 ```
+
+Las guías originales del profesor se conservan localmente; los README explican los objetivos, decisiones e instrucciones del código.
 
 Git y GitHub conservan el historial. Los ejecutables, temporales, configuraciones locales y credenciales quedan fuera del repositorio mediante `.gitignore`.
 
