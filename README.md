@@ -6,7 +6,7 @@ La idea es poder volver a un ejercicio, entender las decisiones que tomé y ejec
 
 ## Cómo ha evolucionado en 2026-2
 
-Empecé con estadísticas, búsquedas y ordenamiento sobre vectores. Después pasé a punteros, separación de archivos y memoria. Las entregas de Estructuras de Datos incorporan arreglos irregulares, listas enlazadas y templates; el laboratorio 04 aplica listas simples a la suma y resta de polinomios. En el laboratorio 05 combiné una lista doble de estudiantes con listas simples de calificaciones e inserción por apellido.
+Empecé con estadísticas, búsquedas y ordenamiento sobre vectores. Después pasé a punteros, separación de archivos y memoria. Las entregas de Estructuras de Datos incorporan arreglos irregulares, listas enlazadas y templates; el laboratorio 04 aplica listas simples a la suma y resta de polinomios. En el laboratorio 05 combiné una lista doble de estudiantes con listas simples de calificaciones e inserción por apellido. El laboratorio 06 practica recursividad con mínimos, inversión de dígitos, consonantes y canje de envolturas por chocolates.
 
 ## Cómo navegarlo
 
